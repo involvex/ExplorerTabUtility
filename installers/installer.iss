@@ -8,7 +8,7 @@
 #define DashPos Pos("-", MyAppVersionWithoutV)
 #define MyAppNumericVersion (DashPos > 0) ? Copy(MyAppVersionWithoutV, 1, DashPos - 1) : MyAppVersionWithoutV
 
-#define MyAppPublisher "w4po"
+#define MyAppPublisher "involvex"
 #define MyAppName "ExplorerTabUtility"
 #define MyAppExeName MyAppName + ".exe"
 #define MyAppRelativePath MyAppName + "\" + MyAppExeName

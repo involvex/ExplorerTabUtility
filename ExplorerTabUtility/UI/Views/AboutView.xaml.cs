@@ -29,8 +29,8 @@ public partial class AboutView : UserControl
 
     private void AboutView_Loaded(object sender, RoutedEventArgs e)
     {
-        if (_isSupportersLoaded) return;
-        _ = LoadSupporters();
+        //if (_isSupportersLoaded) return;
+        //_ = LoadSupporters();
     }
 
     private async Task LoadSupporters()
@@ -38,9 +38,9 @@ public partial class AboutView : UserControl
         try
         {
             var supporters = await Helpers.Helper.GetSupporters().ConfigureAwait(true);
-            if (supporters.Count > 0) _isSupportersLoaded = true;
+            //if (supporters.Count > 0) _isSupportersLoaded = true;
 
-            SupportersItemsControl.ItemsSource = supporters;
+            //SupportersItemsControl.ItemsSource = supporters;
         }
         catch
         {
@@ -55,12 +55,11 @@ public partial class AboutView : UserControl
         continuousStoryboard?.Storyboard?.Begin();
     }
 
-    private void BtnGitHubSponsors_Click(object _, RoutedEventArgs __) => OpenUrl("https://github.com/sponsors/w4po");
-    private void BtnPatreon_Click(object _, RoutedEventArgs __) => OpenUrl("https://www.patreon.com/w4po");
-    private void BtnBuyMeACoffee_Click(object _, RoutedEventArgs __) => OpenUrl("https://www.buymeacoffee.com/w4po");
-    private void BtnPayPal_Click(object _, RoutedEventArgs __) => OpenUrl("https://paypal.me/w4po77");
-    private void OpenDeveloperPage(object _, RoutedEventArgs __) => OpenUrl("https://github.com/w4po");
-    private void OpenProjectPage(object _, RoutedEventArgs __) => OpenUrl("https://github.com/w4po/ExplorerTabUtility");
+    private void BtnGitHubSponsors_Click(object _, RoutedEventArgs __) => OpenUrl("https://github.com/sponsors/involvex");
+    private void BtnBuyMeACoffee_Click(object _, RoutedEventArgs __) => OpenUrl("https://www.buymeacoffee.com/involvex");
+    private void BtnPayPal_Click(object _, RoutedEventArgs __) => OpenUrl("https://paypal.me/involvex");
+    private void OpenDeveloperPage(object _, RoutedEventArgs __) => OpenUrl("https://github.com/involvex");
+    private void OpenProjectPage(object _, RoutedEventArgs __) => OpenUrl("https://github.com/involvex/ExplorerTabUtility");
 
     private void OpenSupportPage(object sender, RoutedEventArgs _)
     {

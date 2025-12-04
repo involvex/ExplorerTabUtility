@@ -369,7 +369,7 @@
                                 <RotateTransform CenterX="45" CenterY="45" />
                             </Border.RenderTransform>
                             <Border.Background>
-                                <ImageBrush ImageSource="pack://application:,,,/Icon.ico" />
+                                <ImageBrush ImageSource="/UI/Views/icon.ico" />
                             </Border.Background>
                             <Border.Triggers>
                                 <EventTrigger RoutedEvent="Loaded">
@@ -490,19 +490,6 @@
                             </StackPanel>
                         </Button>
 
-                        <Button x:Name="BtnPatreon"
-                                Style="{StaticResource SupportButtonStyle}"
-                                Click="BtnPatreon_Click">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="🏆"
-                                           Style="{StaticResource ColorfulEmojiStyle}"
-                                           Foreground="#F96854" />
-                                <TextBlock Text="Patreon"
-                                           FontSize="16"
-                                           VerticalAlignment="Center" />
-                            </StackPanel>
-                        </Button>
-
                         <Button x:Name="BtnBuyMeACoffee"
                                 Style="{StaticResource SupportButtonStyle}"
                                 Click="BtnBuyMeACoffee_Click">
@@ -545,17 +532,10 @@
                                     </Grid.ColumnDefinitions>
 
                                     <!-- Developer Avatar -->
-                                    <Border Margin="0,0,16,0"
-                                            Style="{StaticResource SupporterAvatarStyle}"
-                                            MouseLeftButtonUp="OpenDeveloperPage">
-                                        <Border.Background>
-                                            <ImageBrush ImageSource="https://avatars.githubusercontent.com/u/6666887?s=160" />
-                                        </Border.Background>
-                                    </Border>
 
                                     <!-- Developer Info -->
                                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                        <TextBlock Text="Abd-Alrahman Ghanem"
+                                        <TextBlock Text="Involvex"
                                                    FontWeight="SemiBold"
                                                    FontSize="16"
                                                    Cursor="Hand"
@@ -577,7 +557,7 @@
                                             </TextBlock.Triggers>
                                         </TextBlock>
                                         <TextBlock Margin="0,4,0,0">
-                                            <TextBlock Text="github.com/w4po"
+                                            <TextBlock Text="github.com/involvex"
                                                        Cursor="Hand"
                                                        TextDecorations="Underline"
                                                        MouseLeftButtonUp="OpenDeveloperPage"
@@ -590,94 +570,7 @@
                     </StackPanel>
 
                     <!-- Right Column: Supporters -->
-                    <StackPanel Grid.Column="2">
-                        <TextBlock Text="Current Supporters"
-                                   Style="{StaticResource SectionTitleStyle}" />
-
-                        <TextBlock Text="Thank you to all the amazing people who support this project!"
-                                   TextWrapping="Wrap"
-                                   Foreground="{StaticResource TextSecondaryBrush}"
-                                   Height="42"
-                                   Margin="0,0,0,12" />
-
-                        <Border Style="{StaticResource ProfileCardStyle}"
-                                CornerRadius="8"
-                                Padding="12">
-                            <ScrollViewer MaxHeight="300"
-                                          VerticalScrollBarVisibility="Auto"
-                                          HorizontalScrollBarVisibility="Disabled"
-                                          Style="{StaticResource CustomScrollViewerStyle}">
-                                <ItemsControl x:Name="SupportersItemsControl"
-                                              d:DataContext="{d:DesignInstance Type=models:SupporterInfo}">
-                                    <ItemsControl.Style>
-                                        <Style TargetType="ItemsControl">
-                                            <Style.Triggers>
-                                                <Trigger Property="HasItems" Value="False">
-                                                    <Setter Property="Template">
-                                                        <Setter.Value>
-                                                            <ControlTemplate>
-                                                                <StackPanel HorizontalAlignment="Center"
-                                                                            VerticalAlignment="Center">
-                                                                    <TextBlock Text="🤝"
-                                                                               FontFamily="Segoe UI Emoji"
-                                                                               FontSize="32"
-                                                                               HorizontalAlignment="Center"
-                                                                               Foreground="{StaticResource PrimaryLightBrush}"
-                                                                               Margin="0,0,0,12">
-                                                                        <TextBlock.Effect>
-                                                                            <DropShadowEffect Color="{StaticResource PrimaryLightColor}"
-                                                                                              BlurRadius="15"
-                                                                                              ShadowDepth="0"
-                                                                                              Opacity="0.5" />
-                                                                        </TextBlock.Effect>
-                                                                    </TextBlock>
-                                                                    <TextBlock Text="Be the first to support this project!"
-                                                                               TextWrapping="Wrap"
-                                                                               FontSize="16"
-                                                                               FontWeight="Medium"
-                                                                               Foreground="{StaticResource TextSecondaryBrush}"
-                                                                               HorizontalAlignment="Center" />
-                                                                    <TextBlock Text="Your support helps keep this project alive"
-                                                                               TextWrapping="Wrap"
-                                                                               Margin="0,8,0,0"
-                                                                               Foreground="{StaticResource TextSecondaryBrush}"
-                                                                               Opacity="0.8"
-                                                                               HorizontalAlignment="Center" />
-                                                                </StackPanel>
-                                                            </ControlTemplate>
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Trigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </ItemsControl.Style>
-                                    <ItemsControl.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <WrapPanel />
-                                        </ItemsPanelTemplate>
-                                    </ItemsControl.ItemsPanel>
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate DataType="{x:Type models:SupporterInfo}">
-                                            <Border Style="{StaticResource SupporterItemStyle}">
-                                                <StackPanel>
-                                                    <Border Style="{StaticResource SupporterAvatarStyle}"
-                                                            Tag="{Binding ProfileUrl}"
-                                                            MouseLeftButtonUp="OpenSupportPage">
-                                                        <Border.Background>
-                                                            <ImageBrush
-                                                                ImageSource="{Binding ImageUrl, Converter={StaticResource Base64ImageConverter}}" />
-                                                        </Border.Background>
-                                                    </Border>
-                                                    <TextBlock Text="{Binding Name}"
-                                                               Style="{StaticResource SupporterNameStyle}" />
-                                                </StackPanel>
-                                            </Border>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </ScrollViewer>
-                        </Border>
-                    </StackPanel>
+                    <StackPanel Grid.Column="2"/>
                 </Grid>
             </Grid>
         </ScrollViewer>
