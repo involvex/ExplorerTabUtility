@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFrameworks>net9.0-windows;net481</TargetFrameworks>
+        <TargetFramework>net481</TargetFramework>
         <Nullable>enable</Nullable>
         <UseWPF>True</UseWPF>
         <ApplicationIcon>Icon.ico</ApplicationIcon>
@@ -36,7 +36,7 @@
         <PackageReference Include="System.Text.Json" Version="9.0.3" />
     </ItemGroup>
 
-    <ItemGroup>
+    <ItemGroup Condition="'$(TargetFramework)' == 'net481'">
         <COMReference Include="SHDocVw">
             <WrapperTool>tlbimp</WrapperTool>
             <VersionMinor>1</VersionMinor>

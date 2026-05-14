@@ -26,19 +26,17 @@ Explorer Tab Utility is a Windows desktop application that automatically convert
 
 ### Build Commands
 
+> **Note**: This project uses COM references (SHDocVw, Shell32) which are not supported by `dotnet build`. Use Visual Studio MSBuild or the .NET Framework MSBuild instead.
+
 ```powershell
-# Build the solution in Release mode
-dotnet build -c Release
+# Build with Visual Studio MSBuild (recommended)
+& "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe" ExplorerTabUtility/ExplorerTabUtility.csproj /p:Configuration=Release
 
-# Build for a specific framework (net9.0-windows or net481)
-dotnet build -c Release -f net9.0-windows
+# Or find your VS installation path:
+# & "C:\Program Files\Microsoft Visual Studio\2022\Professional\MSBuild\Current\Bin\MSBuild.exe" ...
+
+# Build for a specific framework (net481)
 dotnet build -c Release -f net481
-
-# Clean and rebuild
-dotnet clean -c Release && dotnet build -c Release
-
-# Build with detailed logging
-dotnet build -c Release -v detailed
 ```
 
 ### Run Commands
