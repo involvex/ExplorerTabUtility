@@ -11,8 +11,6 @@ namespace ExplorerTabUtility.UI.Views;
 // ReSharper disable once RedundantExtendsListEntry
 public partial class AboutView : UserControl
 {
-    private bool _isSupportersLoaded;
-
     public string Version
     {
         get

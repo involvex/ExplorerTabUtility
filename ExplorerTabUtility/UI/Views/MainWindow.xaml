@@ -221,7 +221,7 @@
                                                       Style="{StaticResource CustomCheckBoxStyle}"
                                                       ToolTip="Restore previously opened windows after restart or crash" />
                                             <Button x:Name="BtnRestoreSession" Content="Restore Previous Session"
-                                                    Style="{StaticResource CustomButtonStyle}"
+                                                    Style="{StaticResource FlatButtonStyle}"
                                                     ToolTip="Manually restore all tabs from the previous session"
                                                     Margin="0,8,0,0" Padding="12,6"
                                                     Click="BtnRestoreSession_Click" />

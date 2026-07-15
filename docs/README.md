@@ -4,7 +4,7 @@
 > Force new File Explorer windows to open as tabs in Windows 11, making your workflow cleaner and more organized!
 
 <div align="center">
-  <img src="https://cdn.jsdelivr.net/gh/w4po/ExplorerTabUtility@master/Assets/ExplorerTabUtilityLogo.gif" alt="Explorer Tab Utility Logo">
+  <img src="https://cdn.jsdelivr.net/gh/w4po/ExplorerTabUtility@main/Assets/ExplorerTabUtilityLogo.gif" alt="Explorer Tab Utility Logo">
   
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
   [![Windows 11](https://img.shields.io/badge/Windows%2011-22H2+-blue.svg)](https://www.microsoft.com/windows/windows-11)
@@ -18,7 +18,7 @@
 ## 🤔 Why Explorer Tab Utility?
 
 <div align="center">
-  <img src="https://cdn.jsdelivr.net/gh/w4po/ExplorerTabUtility@master/Assets/TheWhy.png" alt="Why use Explorer Tab Utility">
+  <img src="https://cdn.jsdelivr.net/gh/w4po/ExplorerTabUtility@main/Assets/TheWhy.png" alt="Why use Explorer Tab Utility">
 </div>
 
 Say goodbye to cluttered desktops with multiple Explorer windows! Explorer Tab Utility automatically converts new windows into tabs, providing a cleaner and more organized file management experience.
@@ -36,7 +36,7 @@ Say goodbye to cluttered desktops with multiple Explorer windows! Explorer Tab U
 - Handles opening multiple tabs at once
 
 **See it in action:**
-![Window to tab conversion](https://cdn.jsdelivr.net/gh/w4po/ExplorerTabUtility@master/Assets/WindowToTab.gif)
+![Window to tab conversion](https://cdn.jsdelivr.net/gh/w4po/ExplorerTabUtility@main/Assets/WindowToTab.gif)
 </details>
 
 <details>
@@ -47,7 +47,7 @@ Say goodbye to cluttered desktops with multiple Explorer windows! Explorer Tab U
 - Preserves the current location and selected items
 
 **See it in action:**
-![Duplicate current tab](https://cdn.jsdelivr.net/gh/w4po/ExplorerTabUtility@master/Assets/DuplicateTab.gif)
+![Duplicate current tab](https://cdn.jsdelivr.net/gh/w4po/ExplorerTabUtility@main/Assets/DuplicateTab.gif)
 </details>
 
 <details>
@@ -59,7 +59,7 @@ Say goodbye to cluttered desktops with multiple Explorer windows! Explorer Tab U
 - History is saved across application restarts (enable "Save closed history" in settings)
 
 **See it in action:**
-![Reopen closed tabs](https://cdn.jsdelivr.net/gh/w4po/ExplorerTabUtility@master/Assets/ReopenClosedTab.gif)
+![Reopen closed tabs](https://cdn.jsdelivr.net/gh/w4po/ExplorerTabUtility@main/Assets/ReopenClosedTab.gif)
 </details>
 
 <details>
@@ -68,8 +68,10 @@ Say goodbye to cluttered desktops with multiple Explorer windows! Explorer Tab U
 - Automatically restore previously opened windows if File-Explorer restart/crash or system reboot
 - Configurable via "Restore previous windows" setting
 - Confirmation dialog allows you to choose whether to restore windows on first launch
+- "Restore Previous Session" button for manual session restoration without waiting for the prompt
+- Crash-safe persistence: Tab history is saved every 30 seconds, so even unexpected crashes won't lose your session
 
-![Restore Previous Windows](https://cdn.jsdelivr.net/gh/w4po/ExplorerTabUtility@master/Assets/RestorePrevious.png)
+![Restore Previous Windows](https://cdn.jsdelivr.net/gh/w4po/ExplorerTabUtility@main/Assets/RestorePrevious.png)
 </details>
 
 <details>
@@ -85,7 +87,7 @@ Say goodbye to cluttered desktops with multiple Explorer windows! Explorer Tab U
 - Customize delays to match your system's performance
 
 **See it in action:**
-![Detach & Snap](https://cdn.jsdelivr.net/gh/w4po/ExplorerTabUtility@master/Assets/DetachSnap.gif)
+![Detach & Snap](https://cdn.jsdelivr.net/gh/w4po/ExplorerTabUtility@main/Assets/DetachSnap.gif)
 </details>
 
 <details>
@@ -97,7 +99,7 @@ Say goodbye to cluttered desktops with multiple Explorer windows! Explorer Tab U
 - Perfect for quick navigation between directories
 
 **See it in action:**
-![Navigate back/up](https://cdn.jsdelivr.net/gh/w4po/ExplorerTabUtility@master/Assets/NavigateBack.gif)
+![Navigate back/up](https://cdn.jsdelivr.net/gh/w4po/ExplorerTabUtility@main/Assets/NavigateBack.gif)
 </details>
 
 <details>
@@ -115,7 +117,7 @@ Say goodbye to cluttered desktops with multiple Explorer windows! Explorer Tab U
 - Instant access to system folders using CLSIDs
 
 **See it in action:**
-![Custom location](https://cdn.jsdelivr.net/gh/w4po/ExplorerTabUtility@master/Assets/CustomLocation.gif)
+![Custom location](https://cdn.jsdelivr.net/gh/w4po/ExplorerTabUtility@main/Assets/CustomLocation.gif)
 </details>
 
 <details>
@@ -130,7 +132,7 @@ Say goodbye to cluttered desktops with multiple Explorer windows! Explorer Tab U
   - CTRL key: Duplicate the tab even if it already exists
 - Clear recently closed windows history with a single click
 
-![Tab Search](https://cdn.jsdelivr.net/gh/w4po/ExplorerTabUtility@master/Assets/TabSearch.gif)
+![Tab Search](https://cdn.jsdelivr.net/gh/w4po/ExplorerTabUtility@main/Assets/TabSearch.gif)
 </details>
 
 <details>
@@ -162,7 +164,7 @@ Say goodbye to cluttered desktops with multiple Explorer windows! Explorer Tab U
 2. Run the application
 3. Look for the tray icon and you're ready to go!
 
-    ![Menu](https://cdn.jsdelivr.net/gh/w4po/ExplorerTabUtility@master/Assets/Menu.png)
+    ![Menu](https://cdn.jsdelivr.net/gh/w4po/ExplorerTabUtility@main/Assets/Menu.png)
 
 ## ⚙️ Configuration
 
@@ -177,7 +179,7 @@ Say goodbye to cluttered desktops with multiple Explorer windows! Explorer Tab U
 - **Reuse Tabs**: Switch to existing tabs instead of opening duplicates
 - **Keyboard Hook**: Enable/disable keyboard shortcuts
 - **Mouse Hook**: Enable/disable mouse navigation features
-- **Startup**: Configure automatic startup with Windows
+- **Startup**: Configure automatic startup with Windows (via "Start with Windows" option in Preferences)
 - **Settings Persistence**:
   * Your settings are stored in a JSON file located in your AppData folder:
   ```
@@ -192,11 +194,13 @@ Say goodbye to cluttered desktops with multiple Explorer windows! Explorer Tab U
 - **Auto update**: Automatically check for updates on startup to ensure you're always using the latest version
 - **I have theme issues**: Use an alternative window hiding method that preserves your custom File Explorer theme. Enable this if you experience theme-related issues
 - **Save closed history**: Save recently closed windows for reopening later (ReopenClosed, Tab Search)
-- **Restore previous windows**: Restore previously opened windows after restart or crash
+- **Restore previous windows**: Automatically restore previously opened windows after restart or crash
+- **Restore Previous Session**: Manually restore all tabs from the previous session with a single click. Useful after an unexpected crash or when Explorer was restarted
+- **Start with Windows**: Automatically start Explorer Tab Utility when Windows boots
 - **Hide tray icon**: Hide the system tray icon for a cleaner taskbar experience.
   * You must first configure a hotkey with the `ToggleVisibility` action before enabling this option
 
-![Preferences](https://cdn.jsdelivr.net/gh/w4po/ExplorerTabUtility@master/Assets/Preferences.png)
+![Preferences](https://cdn.jsdelivr.net/gh/w4po/ExplorerTabUtility@main/Assets/Preferences.png)
 </details>
 
 <details>
@@ -237,7 +241,7 @@ Each profile contains the following settings:
    - Key Handling: Toggle whether hotkeys are passed to other applications
    - Profile Deletion: Remove unwanted profiles
 
-![Form](https://cdn.jsdelivr.net/gh/w4po/ExplorerTabUtility@master/Assets/Form.png)
+![Form](https://cdn.jsdelivr.net/gh/w4po/ExplorerTabUtility@main/Assets/Form.png)
 
 > [!TIP]
 > Use the "Handled" toggle to prevent or allow hotkey propagation to other applications that might be listening for the same key combination.
