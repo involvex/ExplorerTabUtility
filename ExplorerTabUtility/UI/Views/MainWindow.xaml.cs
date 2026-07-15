@@ -41,6 +41,7 @@ public partial class MainWindow : Window
         CbAutoSaveProfiles.IsChecked = SettingsManager.SaveProfilesOnExit;
         CbSaveClosedHistory.IsChecked = SettingsManager.SaveClosedHistory;
         CbRestorePreviousWindows.IsChecked = SettingsManager.RestorePreviousWindows;
+        CbStartWithWindows.IsChecked = SettingsManager.StartWithWindows;
         UpdateTrayIconVisibility(false);
 
         if (SettingsManager.AutoUpdate)
@@ -63,12 +64,15 @@ public partial class MainWindow : Window
         BtnImport.Click += BtnImport_Click;
         BtnExport.Click += BtnExport_Click;
         BtnSave.Click += BtnSave_Click;
+        BtnRestoreSession.Click += BtnRestoreSession_Click;
         CbAutoSaveProfiles.Checked += CbAutoSaveProfiles_CheckedChanged;
         CbAutoSaveProfiles.Unchecked += CbAutoSaveProfiles_CheckedChanged;
         CbSaveClosedHistory.Checked += CbSaveClosedHistory_CheckedChanged;
         CbSaveClosedHistory.Unchecked += CbSaveClosedHistory_CheckedChanged;
         CbRestorePreviousWindows.Checked += CbRestorePreviousWindows_CheckedChanged;
         CbRestorePreviousWindows.Unchecked += CbRestorePreviousWindows_CheckedChanged;
+        CbStartWithWindows.Checked += CbStartWithWindows_CheckedChanged;
+        CbStartWithWindows.Unchecked += CbStartWithWindows_CheckedChanged;
         CbAutoUpdate.Checked += CbAutoUpdate_CheckedChanged;
         CbAutoUpdate.Unchecked += CbAutoUpdate_CheckedChanged;
         CbThemeIssue.Checked += CbThemeIssue_CheckedChanged;
@@ -153,6 +157,11 @@ public partial class MainWindow : Window
         openFile.Write(bytes, 0, bytes.Length);
     }
 
+    private async void BtnRestoreSession_Click(object? _, RoutedEventArgs __)
+    {
+        await _hookManager.RestorePreviousSession();
+    }
+
     private void BtnSave_Click(object? _, RoutedEventArgs __)
     {
         _profileManager.SaveProfiles();
@@ -183,6 +192,11 @@ public partial class MainWindow : Window
     private void CbRestorePreviousWindows_CheckedChanged(object? _, RoutedEventArgs __)
     {
         SettingsManager.RestorePreviousWindows = CbRestorePreviousWindows.IsChecked ?? false;
+    }
+
+    private void CbStartWithWindows_CheckedChanged(object? _, RoutedEventArgs __)
+    {
+        SettingsManager.StartWithWindows = CbStartWithWindows.IsChecked ?? false;
     }
 
     private void CbHideTrayIcon_CheckedChanged(object? _, RoutedEventArgs __) => UpdateTrayIconVisibility(true);

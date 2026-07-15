@@ -19,6 +19,7 @@ public class ProfileManager
 
     public event Action? KeybindingsHookStarted;
     public event Action? KeybindingsHookStopped;
+    public event Action? ProfilesChanged;
 
     public ProfileManager(Panel profilePanel)
     {
@@ -92,6 +93,7 @@ public class ProfileManager
         tempProfile.IsEnabled = enabled;
         var control = FindControlByProfile(tempProfile);
         if (control != null) control.IsEnabled = enabled;
+        ProfilesChanged?.Invoke();
     }
 
     public IReadOnlyList<HotKeyProfile> GetProfiles() => _savedProfiles.AsReadOnly();
@@ -112,6 +114,7 @@ public class ProfileManager
 
         // Save to settings
         SettingsManager.HotKeyProfiles = JsonSerializer.Serialize(_savedProfiles);
+        ProfilesChanged?.Invoke();
     }
 
     public void ImportProfiles(string jsonString)

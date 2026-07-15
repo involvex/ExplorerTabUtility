@@ -37,6 +37,8 @@ public class ExplorerWatcher : IHook
     private readonly ProcessWatcher _processWatcher;
     private int _mainExplorerProcessId;
     private Timer? _explorerCheckTimer;
+    private Timer? _persistenceTimer;
+    private const int PersistenceIntervalMs = 30_000;
 
     private nint _eventObjectShowHookId;
     private WinEventDelegate? _eventObjectShowHookCallback;
@@ -57,6 +59,7 @@ public class ExplorerWatcher : IHook
         _processWatcher = new ProcessWatcher("explorer");
         _processWatcher.ProcessTerminated += OnExplorerProcessTerminated;
         StartExplorerProcessCheck();
+        _persistenceTimer = new Timer(_ => PersistWindowsIfNeeded(), null, PersistenceIntervalMs, PersistenceIntervalMs);
     }
 
     public void StartHook()
@@ -531,12 +534,39 @@ public class ExplorerWatcher : IHook
         foreach (var record in _closedWindows.Where(record => record.Restore))
         {
             record.Restore = false;
-            
+
             if (result != MessageBoxResult.Yes) continue;
-            
+
             _ = OpenTabNavigateWithSelection(record);
         }
     }
+
+    public async Task RestorePreviousSession()
+    {
+        WindowRecord[] recordsToRestore;
+        lock (_closedWindowsLock)
+        {
+            recordsToRestore = _closedWindows.Where(r => r.Restore).ToArray();
+            foreach (var record in recordsToRestore)
+                record.Restore = false;
+        }
+
+        if (recordsToRestore.Length == 0)
+        {
+            await RunInStaThread(() => CustomMessageBox.Show(
+                "No previous session to restore.",
+                "Explorer Tab Utility",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information));
+            return;
+        }
+
+        foreach (var record in recordsToRestore)
+        {
+            _ = OpenTabNavigateWithSelection(record);
+        }
+    }
+
     private async Task OpenNewWindowWithSelection(WindowRecord windowToOpen, bool duplicate = true, bool lockToOpenWindows = true)
     {
         if (lockToOpenWindows)
@@ -874,17 +904,11 @@ public class ExplorerWatcher : IHook
                     {
                         crashCount++;
                         lock (_closedWindowsLock)
-                            _closedWindows.Add(new WindowRecord(info.Location!, name: info.Name!));
+                            _closedWindows.Add(new WindowRecord(info.Location!, name: info.Name!, restore: SettingsManager.RestorePreviousWindows));
                     }
-                    
+
                     RemoveWindowAndUnhookEvents(window, info, useLock: false);
                 }
-            }
-            if (!SettingsManager.RestorePreviousWindows || _windowEntryDict.Count > 0) return;
-            lock (_closedWindowsLock)
-            {
-                for (var i = 1; i <= crashCount; i++)
-                    _closedWindows[_closedWindows.Count - i].Restore = true;
             }
         }
     }
@@ -964,13 +988,48 @@ public class ExplorerWatcher : IHook
         _staTaskScheduler.Dispose();
     }
 
+    private void PersistWindowsIfNeeded()
+    {
+        if (!SettingsManager.SaveClosedHistory && !SettingsManager.RestorePreviousWindows) return;
+
+        var store = new List<WindowRecord>();
+
+        if (SettingsManager.SaveClosedHistory)
+            lock (_closedWindowsLock)
+            {
+                store.AddRange(_closedWindows);
+            }
+
+        if (SettingsManager.RestorePreviousWindows)
+            lock (_windowEntryDictLock)
+            {
+                store.AddRange(_windowEntryDict.Values
+                    .Where(w => w.OnNavigateHandler != null)
+                    .Select(w => new WindowRecord(w.Location!, name: w.Name!, restore: true)));
+            }
+
+        if (store.Count == 0) return;
+
+        var distinctItems = store
+            .GroupBy(w => w.Location)
+            .Select(g => g.Last())
+            .ToArray();
+
+        var existingClosed = SettingsManager.ClosedWindows ?? [];
+        var merged = existingClosed.Concat(distinctItems)
+            .GroupBy(w => w.Location)
+            .Select(g => g.Last())
+            .ToArray();
+
+        SettingsManager.ClosedWindows = merged.Skip(Math.Max(0, merged.Length - 100)).ToArray();
+    }
+
     private void PersistWindows()
     {
         var store = new List<WindowRecord>();
         lock (_closedWindowsLock)
         {
             if (SettingsManager.SaveClosedHistory) store.AddRange(_closedWindows);
-            _closedWindows.Clear();
         }
 
         // Save currently open windows (explorer crash / system restart, logoff / AppExit)
@@ -981,20 +1040,22 @@ public class ExplorerWatcher : IHook
                     .Where(w => w.OnNavigateHandler != null)
                     .Select(w => new WindowRecord(w.Location!, name: w.Name!, restore: true)));
             }
-        
-        // DistinctBy location
-        var distinctItems = store
+
+        if (store.Count == 0) return;
+
+        var existingClosed = SettingsManager.ClosedWindows ?? [];
+        var merged = existingClosed.Concat(store)
             .GroupBy(w => w.Location)
             .Select(g => g.Last())
             .ToArray();
-        
-        // TakeLast 100
-        SettingsManager.ClosedWindows = distinctItems.Skip(Math.Max(0, distinctItems.Length - 100)).ToArray();
+
+        SettingsManager.ClosedWindows = merged.Skip(Math.Max(0, merged.Length - 100)).ToArray();
     }
 
     public void Dispose()
     {
         DisposeShellObjects();
+        _persistenceTimer?.Dispose();
         _instanceRunning = false;
         _processWatcher.Dispose();
         GC.SuppressFinalize(this);

@@ -13,7 +13,7 @@ public sealed class Mouse : IHook
     private int _lastClickTime;
     private Key _lastClickKey;
     private readonly LowLevelMouseHook _lowLevelMouseHook;
-    private readonly IReadOnlyCollection<HotKeyProfile> _hotkeyProfiles;
+    private IReadOnlyCollection<HotKeyProfile> _hotkeyProfiles;
     public bool IsHookActive => _lowLevelMouseHook.IsStarted;
     public event Action<HotKeyEventArgs>? OnHotKeyProfileTriggered;
 
@@ -22,6 +22,11 @@ public sealed class Mouse : IHook
         _hotkeyProfiles = hotkeyProfiles;
         _lowLevelMouseHook = new LowLevelMouseHook { AddKeyboardKeys = true };
         _lowLevelMouseHook.Down += LowLevelMouseHook_Down;
+    }
+
+    public void UpdateProfiles(IReadOnlyCollection<HotKeyProfile> hotkeyProfiles)
+    {
+        _hotkeyProfiles = hotkeyProfiles;
     }
 
     public void StartHook() => _lowLevelMouseHook.Start();
@@ -59,6 +64,11 @@ public sealed class Mouse : IHook
                     handle = 0; // Reset handle if not File Explorer
                     continue;
                 }
+            }
+            else
+            {
+                // For Global scope, get the foreground window handle
+                handle = Helper.GetForegroundWindowHandle();
             }
             
             // Queue the hotkey trigger in a separate thread.

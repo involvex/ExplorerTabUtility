@@ -6,18 +6,14 @@ $ErrorActionPreference = "Stop"
 $ProjectPath = "ExplorerTabUtility\ExplorerTabUtility.csproj"
 $Configuration = "Release"
 
-# Find Visual Studio 2022 MSBuild
-$VS2022Paths = @(
-    "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe",
-    "C:\Program Files\Microsoft Visual Studio\2022\Professional\MSBuild\Current\Bin\MSBuild.exe",
-    "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe"
-)
+# Find VS installation using vswhere
+$VSInstallPath = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath
 
 $MSBuild = $null
-foreach ($path in $VS2022Paths) {
-    if (Test-Path $path) {
-        $MSBuild = $path
-        break
+if ($VSInstallPath) {
+    $MSBuildPath = Join-Path $VSInstallPath "MSBuild\Current\Bin\MSBuild.exe"
+    if (Test-Path $MSBuildPath) {
+        $MSBuild = $MSBuildPath
     }
 }
 
@@ -28,8 +24,14 @@ if (-not $MSBuild) {
 
 Write-Host "Using MSBuild: $MSBuild" -ForegroundColor Cyan
 
+# Set SDK path for MSBuild to resolve Microsoft.NET.Sdk
+$env:MSBuildSDKsPath = "C:\Program Files\dotnet\sdk\10.0.302\Sdks"
+
 # Build
-& $MSBuild $ProjectPath /p:Configuration=$Configuration /v:minimal
+& $MSBuild $ProjectPath /t:Restore /p:Configuration=$Configuration /v:minimal
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+& $MSBuild $ProjectPath /t:Build /p:Configuration=$Configuration /v:minimal
 
 if ($LASTEXITCODE -ne 0) {
     Write-Error "Build failed with exit code $LASTEXITCODE"

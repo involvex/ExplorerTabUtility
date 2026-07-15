@@ -16,6 +16,7 @@ public sealed class HookManager
     private readonly Mouse _mouseHook;
     private readonly Keyboard _keyboardHook;
     private readonly ExplorerWatcher _windowHook;
+    private readonly ProfileManager _profileManager;
     private readonly SynchronizationContext _syncContext;
     public event Action? OnVisibilityToggled;
     public event Action? OnWindowHookToggled;
@@ -24,6 +25,7 @@ public sealed class HookManager
 
     public HookManager(ProfileManager profileManager)
     {
+        _profileManager = profileManager;
         _syncContext = SynchronizationContext.Current!;
 
         _windowHook = new ExplorerWatcher();
@@ -32,10 +34,20 @@ public sealed class HookManager
 
         profileManager.KeybindingsHookStarted += KeybindingStarted;
         profileManager.KeybindingsHookStopped += KeybindingStopped;
+        profileManager.ProfilesChanged += OnProfilesChanged;
         _keyboardHook.OnHotKeyProfileTriggered += OnHotKeyProfileTriggered;
         _mouseHook.OnHotKeyProfileTriggered += OnHotKeyProfileTriggered;
         _windowHook.OnShellInitialized += () => OnShellInitialized?.Invoke();
         System.Windows.Application.Current.SessionEnding += (_, _) => Dispose();
+    }
+
+    private void OnProfilesChanged()
+    {
+        _syncContext.Post(_ =>
+        {
+            _keyboardHook.UpdateProfiles(_profileManager.GetProfiles());
+            _mouseHook.UpdateProfiles(_profileManager.GetProfiles());
+        }, null);
     }
 
     public void StartMouseHook() => ChangeHookStatus(_mouseHook, true);
@@ -45,6 +57,7 @@ public sealed class HookManager
     public void StartWindowHook() => ChangeHookStatus(_windowHook, true);
     public void StopWindowHook() => ChangeHookStatus(_windowHook, false);
     public void SetReuseTabs(bool value) => _windowHook.SetReuseTabs(value);
+    public Task RestorePreviousSession() => _windowHook.RestorePreviousSession();
 
     private async void OnHotKeyProfileTriggered(HotKeyEventArgs e)
     {

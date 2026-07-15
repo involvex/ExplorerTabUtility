@@ -3,6 +3,7 @@ using System.Threading;
 using System.Windows.Controls;
 using ExplorerTabUtility.UI.Views;
 using ExplorerTabUtility.Helpers;
+using ExplorerTabUtility.Managers;
 
 namespace ExplorerTabUtility;
 
@@ -19,6 +20,9 @@ public partial class App : Application
         {
             base.OnStartup(e);
             SetupTooltipBehavior();
+
+            if (SettingsManager.StartWithWindows && !RegistryManager.IsStartupEnabled)
+                RegistryManager.AddToStartup();
 
             _ = new MainWindow();
             return;

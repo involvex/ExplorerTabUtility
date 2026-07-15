@@ -284,6 +284,10 @@ public static class Helper
         foregroundWindow = WinApi.GetForegroundWindow();
         return IsFileExplorerWindow(foregroundWindow);
     }
+    public static nint GetForegroundWindowHandle()
+    {
+        return WinApi.GetForegroundWindow();
+    }
     public static nint GetAnotherExplorerWindow(nint currentWindow)
     {
         return currentWindow == 0

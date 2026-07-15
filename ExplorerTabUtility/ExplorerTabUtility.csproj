@@ -12,7 +12,7 @@
         <Authors>Involvex</Authors>
         <Company>$(AssemblyName)</Company>
         <Description>Explorer Tab Utility: Force new windows to tabs. Streamline navigation!</Description>
-       <!-- <Copyright>Copyright © 2025 w4po</Copyright> -->
+        <!-- <Copyright>Copyright © 2025 w4po</Copyright> -->
         <PackageProjectUrl>https://github.com/iinvolvex/ExplorerTabUtility</PackageProjectUrl>
         <RepositoryUrl>https://github.com/iinvolvex/ExplorerTabUtility</RepositoryUrl>
         <SatelliteResourceLanguages>none</SatelliteResourceLanguages>

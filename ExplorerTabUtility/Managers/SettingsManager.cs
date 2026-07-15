@@ -180,6 +180,20 @@ public static class SettingsManager
         }
     }
 
+    public static bool StartWithWindows
+    {
+        get => Settings.StartWithWindows;
+        set
+        {
+            Settings.StartWithWindows = value;
+            if (value)
+                RegistryManager.AddToStartup();
+            else
+                RegistryManager.RemoveFromStartup();
+            SaveSettings();
+        }
+    }
+
     public static WindowRecord[]? ClosedWindows
     {
         get => Settings.ClosedWindows;
@@ -218,7 +232,8 @@ internal class AppSettings
     public bool HaveThemeIssue { get; set; }
     public bool AutoUpdate { get; set; }
     public string HotKeyProfiles { get; set; } = Constants.DefaultHotKeyProfiles;
-    public bool SaveClosedWindows { get; set; }
-    public bool RestorePreviousWindows { get; set; }
+    public bool SaveClosedWindows { get; set; } = true;
+    public bool RestorePreviousWindows { get; set; } = true;
+    public bool StartWithWindows { get; set; }
     public WindowRecord[]? ClosedWindows { get; set; }
 }

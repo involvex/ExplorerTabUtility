@@ -10,7 +10,7 @@ namespace ExplorerTabUtility.Hooks;
 public sealed class Keyboard : IHook
 {
     private readonly LowLevelKeyboardHook _lowLevelKeyboardHook;
-    private readonly IReadOnlyCollection<HotKeyProfile> _hotkeyProfiles;
+    private IReadOnlyCollection<HotKeyProfile> _hotkeyProfiles;
     public bool IsHookActive => _lowLevelKeyboardHook.IsStarted;
     public event Action<HotKeyEventArgs>? OnHotKeyProfileTriggered;
 
@@ -19,6 +19,11 @@ public sealed class Keyboard : IHook
         _hotkeyProfiles = hotkeyProfiles;
         _lowLevelKeyboardHook = new LowLevelKeyboardHook { Handling = true };
         _lowLevelKeyboardHook.Down += LowLevelKeyboardHook_Down;
+    }
+
+    public void UpdateProfiles(IReadOnlyCollection<HotKeyProfile> hotkeyProfiles)
+    {
+        _hotkeyProfiles = hotkeyProfiles;
     }
 
     public void StartHook() => _lowLevelKeyboardHook.Start();
@@ -40,7 +45,7 @@ public sealed class Keyboard : IHook
             // Skip if keys do not match
             if (!e.Keys.Are(profile.HotKeys)) continue;
 
-            // Let's see if we need to check File Explorer
+            // For FileExplorer scope, check if File Explorer is foreground
             if (profile.Scope == HotkeyScope.FileExplorer)
             {
                 // Check if File Explorer is foreground (only once)
@@ -52,10 +57,15 @@ public sealed class Keyboard : IHook
                     continue;
                 }
             }
+            else
+            {
+                // For Global scope, get the foreground window handle
+                handle = Helper.GetForegroundWindowHandle();
+            }
 
             // Set handled value.
             e.IsHandled = profile.IsHandled;
-            
+
             // Queue the hotkey trigger in a separate thread.
 #if NET7_0_OR_GREATER
             ThreadPool.QueueUserWorkItem(static s => s.Handler.Invoke(new HotKeyEventArgs(s.Profile, s.Handle)),

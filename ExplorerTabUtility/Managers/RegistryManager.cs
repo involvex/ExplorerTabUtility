@@ -38,7 +38,7 @@ public static class RegistryManager
         return value == null || value.Length == 0 || value[0] % 2 == 0;
     }
 
-    private static void AddToStartup()
+    public static void AddToStartup()
     {
         if (string.IsNullOrWhiteSpace(ExecutablePath)) return;
 
@@ -54,7 +54,7 @@ public static class RegistryManager
         approvedKey?.SetValue(Constants.AppName, enabledData, RegistryValueKind.Binary);
     }
 
-    private static void RemoveFromStartup()
+    public static void RemoveFromStartup()
     {
         // Remove from Run registry key
         using var runKey = OpenCurrentUserKey(RunKeyPath, true);

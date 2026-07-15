@@ -220,6 +220,14 @@
                                             <CheckBox x:Name="CbRestorePreviousWindows" Content="Restore previous windows"
                                                       Style="{StaticResource CustomCheckBoxStyle}"
                                                       ToolTip="Restore previously opened windows after restart or crash" />
+                                            <Button x:Name="BtnRestoreSession" Content="Restore Previous Session"
+                                                    Style="{StaticResource CustomButtonStyle}"
+                                                    ToolTip="Manually restore all tabs from the previous session"
+                                                    Margin="0,8,0,0" Padding="12,6"
+                                                    Click="BtnRestoreSession_Click" />
+                                            <CheckBox x:Name="CbStartWithWindows" Content="Start with Windows"
+                                                      Style="{StaticResource CustomCheckBoxStyle}"
+                                                      ToolTip="Automatically start Explorer Tab Utility when Windows boots" />
                                             <CheckBox x:Name="CbHideTrayIcon" Content="Hide tray icon"
                                                       Style="{StaticResource CustomCheckBoxStyle}"
                                                       ToolTip="Hide the system tray icon" />
