@@ -359,7 +359,7 @@ public class ExplorerWatcher : IHook
                     _mainWindowHandle = new IntPtr(window.HWND);
 
                     if (SettingsManager.RestorePreviousWindows && _closedWindows.Any(w => w.Restore))
-                        _ = RestorePreviousWindows();
+                        _ = RestorePreviousWindows(_mainWindowHandle);
                 }
                 
                 return window;
@@ -523,7 +523,7 @@ public class ExplorerWatcher : IHook
         Marshal.ReleaseComObject(window);
     }
 
-    private async Task RestorePreviousWindows()
+    private async Task RestorePreviousWindows(nint mainWindowHandle = 0)
     {
         var result = await RunInStaThread(() => CustomMessageBox.Show(
             "Do you want to restore previously opened windows?",
@@ -531,13 +531,18 @@ public class ExplorerWatcher : IHook
             MessageBoxButton.YesNo,
             MessageBoxImage.Question));
 
-        foreach (var record in _closedWindows.Where(record => record.Restore))
+        lock (_closedWindowsLock)
         {
-            record.Restore = false;
+            foreach (var record in _closedWindows.Where(record => record.Restore))
+            {
+                record.Restore = false;
 
-            if (result != MessageBoxResult.Yes) continue;
+                if (result != MessageBoxResult.Yes) continue;
 
-            _ = OpenTabNavigateWithSelection(record);
+                _ = OpenTabNavigateWithSelection(record, mainWindowHandle);
+            }
+
+            SettingsManager.ClosedWindows = _closedWindows.ToArray();
         }
     }
 
@@ -1005,7 +1010,7 @@ public class ExplorerWatcher : IHook
             {
                 store.AddRange(_windowEntryDict.Values
                     .Where(w => w.OnNavigateHandler != null)
-                    .Select(w => new WindowRecord(w.Location!, name: w.Name!, restore: true)));
+                    .Select(w => new WindowRecord(w.Location!, name: w.Name!, restore: false)));
             }
 
         if (store.Count == 0) return;
