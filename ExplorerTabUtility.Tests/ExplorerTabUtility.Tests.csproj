@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <IsPackable>false</IsPackable>
+    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="H.Hooks" Version="1.7.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.0" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="6.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <!-- Link pure-logic sources directly so tests run on net9 without COM/WPF build issues.
+       Do NOT link Helper.cs / ExplorerWatcher.cs / WinApi.cs (COM, STA, P/Invoke). -->
+  <ItemGroup>
+    <Compile Include="..\ExplorerTabUtility\Models\HotKeyAction.cs" Link="Linked\HotKeyAction.cs" />
+    <Compile Include="..\ExplorerTabUtility\Models\HotkeyScope.cs" Link="Linked\HotkeyScope.cs" />
+    <Compile Include="..\ExplorerTabUtility\Models\HotKeyProfile.cs" Link="Linked\HotKeyProfile.cs" />
+    <Compile Include="..\ExplorerTabUtility\Models\DualKeyDictionary.cs" Link="Linked\DualKeyDictionary.cs" />
+    <Compile Include="..\ExplorerTabUtility\Models\WindowRecord.cs" Link="Linked\WindowRecord.cs" />
+    <Compile Include="..\ExplorerTabUtility\Helpers\HotKeyActionJsonConverter.cs" Link="Linked\HotKeyActionJsonConverter.cs" />
+    <Compile Include="..\ExplorerTabUtility\Helpers\IntPtrConverter.cs" Link="Linked\IntPtrConverter.cs" />
+    <Compile Include="..\ExplorerTabUtility\Helpers\FuzzyMatcher.cs" Link="Linked\FuzzyMatcher.cs" />
+  </ItemGroup>
+
+</Project>

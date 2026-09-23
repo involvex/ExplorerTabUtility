@@ -271,6 +271,53 @@ public static class Helper
         var role = accObj.get_accRole(0);
         return role is 0x21; //IAccessible.Role:list (ROLE_SYSTEM_LIST 0x21)
     }
+    public static bool IsOverExplorerTabBar(nint windowHandle, Point point)
+    {
+        if (!IsFileExplorerWindow(windowHandle))
+            return false;
+
+        // Geometric pre-filter: must be inside window and near the top (tab strip).
+        // 90px covers title + tab row across 100-200% DPI; content area is below.
+        if (!WinApi.GetWindowRect(windowHandle, out var rect))
+            return false;
+
+        if (point.X < rect.Left || point.X > rect.Right || point.Y < rect.Top || point.Y > rect.Bottom)
+            return false;
+
+        const int tabStripMaxHeight = 90;
+        if (point.Y - rect.Top > tabStripMaxHeight)
+            return false;
+
+        // Never treat folder content (list view) as tab bar.
+        try
+        {
+            if (IsExplorerEmptySpace(point))
+                return false;
+        }
+        catch
+        {
+            // If MSAA fails, fall through to geometric result.
+        }
+
+        // Best-effort MSAA confirmation: PAGETAB (0x25) / PAGETABLIST (0x3C).
+        // If role lookup fails (custom DirectUI on some builds), keep geometric result.
+        try
+        {
+            var hr = WinApi.AccessibleObjectFromPoint(point, out var accObj, out var childId);
+            if (hr == 0 && accObj != null)
+            {
+                var roleObj = accObj.get_accRole(childId);
+                if (roleObj is int role && (role is 0x25 or 0x3C))
+                    return true;
+            }
+        }
+        catch
+        {
+            // Ignore, use geometric result below.
+        }
+
+        return true;
+    }
     public static bool IsFileExplorerTab(nint tab)
     {
         return tab != 0 && WinApi.IsWindowHasClassName(tab, "ShellTabWindowClass");

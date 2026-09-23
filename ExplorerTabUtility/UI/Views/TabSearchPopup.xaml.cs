@@ -48,10 +48,16 @@ public partial class TabSearchPopup : Window
         }
         else
         {
-            const StringComparison sc = StringComparison.OrdinalIgnoreCase;
             _filteredWindows = _allWindows
-                .Where(w => w.Name.IndexOf(searchText, sc) != -1 || w.Location.IndexOf(searchText, sc) != -1)
-                .OrderByDescending(w => w.Name.IndexOf(searchText, sc) != -1) // Name matches first
+                .Select(w => new
+                {
+                    Window = w,
+                    Score = FuzzyMatcher.ScoreCandidate(w.Name, w.Location, w.DisplayLocation, searchText)
+                })
+                .Where(x => x.Score >= 0)
+                .OrderByDescending(x => x.Score)
+                .ThenBy(x => x.Window.Name, StringComparer.OrdinalIgnoreCase)
+                .Select(x => x.Window)
                 .ToList();
         }
 

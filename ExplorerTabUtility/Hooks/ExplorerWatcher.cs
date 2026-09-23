@@ -295,6 +295,18 @@ public class ExplorerWatcher : IHook
 
         await OpenNewWindowWithSelection(windowRecord);
     }
+    public void CloseTab(nint windowHandle)
+    {
+        if (!Helper.IsFileExplorerWindow(windowHandle))
+            return;
+
+        var activeTabHandle = GetActiveTabHandle(windowHandle);
+        if (activeTabHandle == 0) return;
+
+        // Closing the last tab closes the window (browser-like).
+        // OnQuit handler records it for ReopenClosed/history.
+        WinApi.SendMessage(activeTabHandle, WinApi.WM_COMMAND, 0xA021, 1);
+    }
     public void SetTargetWindow(nint windowHandle)
     {
         if (Helper.IsFileExplorerWindow(windowHandle))

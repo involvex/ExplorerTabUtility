@@ -79,6 +79,16 @@ public sealed class HookManager
                 await _windowHook.DetachCurrentTab(e.ForegroundWindow);
                 break;
 
+            case HotKeyAction.CloseTab:
+                // Mouse-triggered close is restricted to the tab bar (per settings).
+                // Keyboard-triggered close applies to the active tab.
+                if (e.MousePosition is { } mousePosition &&
+                    !Helper.IsOverExplorerTabBar(e.ForegroundWindow, mousePosition))
+                    break;
+
+                _windowHook.CloseTab(e.ForegroundWindow);
+                break;
+
             case HotKeyAction.SetTargetWindow:
                 _windowHook.SetTargetWindow(e.ForegroundWindow);
                 break;
